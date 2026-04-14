@@ -1,0 +1,13 @@
+body {
+    background-color: #2d5e8a; /* Um azul bem clarinho */
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    color: #2c3e50;
+}
