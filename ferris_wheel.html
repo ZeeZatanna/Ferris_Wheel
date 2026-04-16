@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="ferris_wheel.css">
   <title>Document</title>
 </head>
+
 <body class="theme">
   <header>
     <!--Cabeçalho-->
-    <nav class = "navbar_icons">
-        <div class = "navbar_mobile"> <!--"topo" do cabeçalho-->
-          <ul>
+    <nav class="navbar_icons">
+      <div class="navbar_mobile"> <!--"topo" do cabeçalho-->
+        <ul>
 
-            <li class = "navbar_mobile menu">
-              <button id="bt_menu" aria-label="Abrir Menu"> 
-                <!--criar o menu cascata aqui-->
-                  <img src="menu-icon-19353.png" alt="Ícone de Menu" class="icon-hamburguer">
-                </button>
-            </li>
-                
-            <li class = "navbar_mobile logo">
-              <div class = "logo_link">
-                <!--colocar o link para a página inicial aqui-->
-                  <img src="ferris_wheel_logo.png" alt="Ícone de Logo" class="icon-logo">
-              </div>
-            </li>
+          <li class="navbar_mobile menu">
+            <button id="bt_menu" aria-label="Abrir Menu">
+              <!--criar o menu cascata aqui-->
+              <img src="menu-icon-19353.png" alt="Ícone de Menu" class="icon-hamburguer">
+            </button>
+          </li>
 
-            <li class = "navbar_mobile profile">
-              <button id="bt_profile" aria-label="Abrir Pefil">
-                  <img src="perfil.png" alt="Ícone de Perfil" class="icon-profile">
-                </button>
-              </li>
-                
-            <li class = "navbar_mobile cart">
-               <button id="bt_cart" aria-label="Abrir Carrinho de Compras">
-                  <img src="cart.png" alt="Ícone de Carrinho de Compras" class="icon-cart">
-              </button>
-            </li>
-             
-          </ul>
+          <li class="navbar_mobile logo">
+            <div class="logo_link">
+              <!--colocar o link para a página inicial aqui-->
+              <img src="ferris_wheel_logo.png" alt="Ícone de Logo" class="icon-logo">
+            </div>
+          </li>
 
-        </div>
+          <li class="navbar_mobile profile">
+            <button id="bt_profile" aria-label="Abrir Pefil">
+              <img src="perfil.png" alt="Ícone de Perfil" class="icon-profile">
+            </button>
+          </li>
 
-        <div class="navbar_searchinput"><!--"pé" do cabeçalho-->
-            <label for="searchinput"></label>
-            <input type="text" id="search_bar" name="searchinput" placeholder="&#128269;Digite a sua busca:" aria-label="Barra de Pesquisa">
-        </div>
+          <li class="navbar_mobile cart">
+            <button id="bt_cart" aria-label="Abrir Carrinho de Compras">
+              <img src="cart.png" alt="Ícone de Carrinho de Compras" class="icon-cart">
+            </button>
+          </li>
+
+        </ul>
+
+      </div>
+
+      <div class="navbar_searchinput"><!--"pé" do cabeçalho-->
+        <label for="searchinput"></label>
+        <input type="text" id="search_bar" name="searchinput" placeholder="&#128269;Digite a sua busca:"
+          aria-label="Barra de Pesquisa">
+      </div>
 
     </nav>
   </header>
@@ -61,23 +64,39 @@
         <img src="carrossel_img_1.jpg" alt="Imagem de uma montanha russa" class="first-img">
       </div>
     </div>
-  </div>
 
-  <!--"Atalho para compras rápidas"-->
-  <div class="container">
+    <!--"Atalho para compras rápidas"-->
+    <div class="container">
 
-    <div class="mobile"> <!--versão mobile-->
-      <p>Garanta já o seu ingresso!</p>
-      <button id="bt_comprar" aria-label="Comprar ingressos">
-        Comprar Agora <!--inserir link para a pagina de compra aqui-->
-      </button>
+      <div class="mobile"> <!--versão mobile-->
+        <h2>Garanta já o seu ingresso!</h2>
+        <button id="bt_comprar" aria-label="Comprar ingressos">
+          Comprar Agora <!--inserir link para a pagina de compra aqui-->
+        </button>
 
+      </div>
+
+      <div class="descktop"> <!--versão descktop-->
+
+      </div>
+    </div>
+    <!--Descrição do Parque-->
+    <div class="content_container">
+      <img src="content_slide_img_1.jpg" alt="Outra image de montanha montanha-russa" class="content_slide_img_1">
+
+      <div class="written_content">
+        <h3>Atrações</h3>
+        <p>
+          A montanha-russa é uma atração popular em parques de diversões, que consiste em uma estrutura de aço que forma
+          uma pista composta por elevações seguidas de quedas.
+        </p>
+      </div>
     </div>
 
-    <div class="descktop"> <!--versão descktop-->
-
-    </div>
   </div>
+
+
   <script src="ferris_wheel.js"></script>
 </body>
+
 </html>
