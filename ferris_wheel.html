@@ -10,22 +10,74 @@
   <header>
     <!--Cabeçalho-->
     <nav class = "navbar_icons">
-        <div class = "navbar_mobile">
+        <div class = "navbar_mobile"> <!--"topo" do cabeçalho-->
           <ul>
-            <li class = "navbar_mobile menu"></li>
-                <button id="bt_menu" aria-label="Abrir Menu"> 
-                  <img src="C:\Users\Izabel\Ferris_Wheel\menu-icon-19353.png" alt="Ícone de Menu" class="icone-hamburguer">
+
+            <li class = "navbar_mobile menu">
+              <button id="bt_menu" aria-label="Abrir Menu"> 
+                <!--criar o menu cascata aqui-->
+                  <img src="menu-icon-19353.png" alt="Ícone de Menu" class="icon-hamburguer">
                 </button>
-            <li class = "navbar_mobile logo"></li>
-            <li class = "navbar_mobile profile"></li>
-            <li class = "navbar_mobile cart"></li>
+            </li>
+                
+            <li class = "navbar_mobile logo">
+              <div class = "logo_link">
+                <!--colocar o link para a página inicial aqui-->
+                  <img src="ferris_wheel_logo.png" alt="Ícone de Logo" class="icon-logo">
+              </div>
+            </li>
+
+            <li class = "navbar_mobile profile">
+              <button id="bt_profile" aria-label="Abrir Pefil">
+                  <img src="perfil.png" alt="Ícone de Perfil" class="icon-profile">
+                </button>
+              </li>
+                
+            <li class = "navbar_mobile cart">
+               <button id="bt_cart" aria-label="Abrir Carrinho de Compras">
+                  <img src="cart.png" alt="Ícone de Carrinho de Compras" class="icon-cart">
+              </button>
+            </li>
+             
           </ul>
-        </div>
-        <div class="navbar_ searchinput">
 
         </div>
+
+        <div class="navbar_searchinput"><!--"pé" do cabeçalho-->
+            <label for="searchinput"></label>
+            <input type="text" id="search_bar" name="searchinput" placeholder="&#128269;Digite a sua busca:" aria-label="Barra de Pesquisa">
+        </div>
+
     </nav>
   </header>
+
+  <!--Corpo do Site-->
+
+  <div class="home_page">
+
+    <!--(Futuro) Carossel de Imagens-->
+    <div class="home_page_banner">
+      <div class="img_1"><!--coloquei essa div aqui pq sei que vou precisar dela para fazer o carrossel de imagens-->
+        <img src="carrossel_img_1.jpg" alt="Imagem de uma montanha russa" class="first-img">
+      </div>
+    </div>
+  </div>
+
+  <!--"Atalho para compras rápidas"-->
+  <div class="container">
+
+    <div class="mobile"> <!--versão mobile-->
+      <p>Garanta já o seu ingresso!</p>
+      <button id="bt_comprar" aria-label="Comprar ingressos">
+        Comprar Agora <!--inserir link para a pagina de compra aqui-->
+      </button>
+
+    </div>
+
+    <div class="descktop"> <!--versão descktop-->
+
+    </div>
+  </div>
   <script src="ferris_wheel.js"></script>
 </body>
 </html>
