@@ -1,102 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ferris Wheel - Parque de Diversões</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script defer src="ferris_wheel.js"></script>
   <link rel="stylesheet" href="ferris_wheel.css">
-  <title>Document</title>
 </head>
 
-<body class="theme">
-  <header>
-    <!--Cabeçalho-->
-    <nav class="navbar_icons">
-      <div class="navbar_mobile"> <!--"topo" do cabeçalho-->
-        <ul>
-
-          <li class="navbar_mobile menu">
-            <button id="bt_menu" aria-label="Abrir Menu">
-              <!--criar o menu cascata aqui-->
-              <img src="menu-icon-19353.png" alt="Ícone de Menu" class="icon-hamburguer">
+<body>
+  <div id="app" class="bg-gray-50 font-sans antialiased text-gray-800 min-h-screen">
+    
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        
+        <div class="flex items-center justify-between w-full md:w-auto">
+          <button @click="toggleMenu" class="p-2 hover:bg-indigo-700 rounded-lg transition" aria-label="Abrir Menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          </button>
+          
+          <div class="flex items-center gap-2 cursor-pointer">
+            <div class="bg-yellow-400 p-2 rounded-full text-indigo-900 font-bold tracking-wider text-sm">FW</div>
+            <span class="font-black text-xl tracking-wide">Ferris Wheel</span>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button @click="openModal('perfil')" class="p-2 hover:bg-indigo-700 rounded-lg" aria-label="Perfil">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             </button>
-          </li>
-
-          <li class="navbar_mobile logo">
-            <div class="logo_link">
-              <!--colocar o link para a página inicial aqui-->
-              <img src="ferris_wheel_logo.png" alt="Ícone de Logo" class="icon-logo">
-            </div>
-          </li>
-
-          <li class="navbar_mobile profile">
-            <button id="bt_profile" aria-label="Abrir Pefil">
-              <img src="perfil.png" alt="Ícone de Perfil" class="icon-profile">
+            <button @click="openModal('carrinho')" class="p-2 hover:bg-indigo-700 rounded-lg relative" aria-label="Carrinho">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.2 9.3a.5.5 0 00.46.6h11.6a.5.5 0 00.46-.3L17 13M9 22a1 1 0 100-2 1 1 0 000 2zm7 0a1 1 0 100-2 1 1 0 000 2z"></path></svg>
+              <span v-if="carrinho.quantidade > 0" class="absolute -top-1 -right-1 bg-yellow-400 text-indigo-900 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
+                {{ carrinho.quantidade }}
+              </span>
             </button>
-          </li>
+          </div>
+        </div>
 
-          <li class="navbar_mobile cart">
-            <button id="bt_cart" aria-label="Abrir Carrinho de Compras">
-              <img src="cart.png" alt="Ícone de Carrinho de Compras" class="icon-cart">
+        <div v-if="menuAberto" class="md:hidden bg-indigo-700 rounded-lg p-4 flex flex-col gap-2">
+          <a href="#" class="block py-2 px-3 rounded hover:bg-indigo-800">Início</a>
+          <a href="#atracoes" class="block py-2 px-3 rounded hover:bg-indigo-800">Atrações</a>
+          <a href="#ingressos" class="block py-2 px-3 rounded hover:bg-indigo-800">Ingressos</a>
+        </div>
+
+        <div class="w-full md:w-80">
+          <input v-model="busca" type="text" placeholder="🔍 Digite a sua busca..." class="w-full px-4 py-2 rounded-lg text-gray-900 bg-white border-none focus:ring-2 focus:ring-yellow-400 outline-none transition shadow-inner">
+        </div>
+      </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-12">
+      
+       <section class="relative rounded-2xl overflow-hidden shadow-xl bg-gray-900 h-[300px] md:h-[450px]">
+        <img :src="carrossel[slideAtivo].imagem" :alt="carrossel[slideAtivo].alt" class="w-full h-full object-cover opacity-60 absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6 md:p-12">
+          <h2 class="text-white text-2xl md:text-4xl font-bold tracking-tight z-10">{{ carrossel[slideAtivo].texto }}</h2>
+        </div>
+        <button @click="slideAnterior" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 p-2 rounded-full text-white z-10">❮</button>
+        <button @click="proximoSlide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 p-2 rounded-full text-white z-10">❯</button>
+      </section>
+
+      <section id="ingressos" class="bg-indigo-900 text-white rounded-2xl p-6 md:p-8 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left space-y-2">
+          <h2 class="text-2xl md:text-3xl font-black text-yellow-400">Garanta já o seu ingresso!</h2>
+          <p class="text-indigo-200 text-sm md:text-base">Evite filas e aproveite o melhor dia da sua vida no Ferris Wheel.</p>
+        </div>
+        <div class="flex items-center gap-4 bg-indigo-800 p-4 rounded-xl border border-indigo-700 w-full md:w-auto justify-between">
+          <div class="flex items-center gap-3">
+            <button @click="alterarQuantidade(-1)" class="bg-indigo-700 hover:bg-indigo-600 px-3 py-1 rounded font-bold">-</button>
+            <span class="text-xl font-bold w-6 text-center">{{ qtdIngressos }}</span>
+            <button @click="alterarQuantidade(1)" class="bg-indigo-700 hover:bg-indigo-600 px-3 py-1 rounded font-bold">+</button>
+          </div>
+          <button @click="adicionarAoCarrinho" class="bg-yellow-400 hover:bg-yellow-300 text-indigo-900 font-extrabold px-6 py-3 rounded-xl transition transform active:scale-95 shadow-md">
+            Comprar Agora
+          </button>
+        </div>
+      </section>
+
+      <section id="atracoes" class="space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 pb-4">
+          <h3 class="text-2xl font-bold text-gray-900 tracking-tight">Explore nossas Atrações</h3>
+          <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+            <button v-for="cat in categorias" :key="cat" @click="categoriaSelecionada = cat" :class="categoriaSelecionada === cat ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'" class="px-4 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap">
+              {{ cat }}
             </button>
-          </li>
+          </div>
+        </div>
+      </section>
 
-        </ul>
-
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-for="atracao in atracoesFiltradas" :key="atracao.id" class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition border border-gray-100 flex flex-col justify-between p-5 space-y-4">
+          <img :src="atracao.imagem" :alt="atracao.nome" class="w-full h-48 object-cover">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">{{ atracao.categoria }}</span>
+        
+            <h4 class="text-xl font-bold text-gray-900 mt-1">{{ atracao.nome }}</h4>
+        
+            <p class="text-gray-600 text-sm mt-2 leading-relaxed">{{ atracao.descricao }}</p>
+          </div>
+    
+          <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-between text-xs">
+            <span class="text-gray-500">Fila atual: <strong class="text-gray-800">{{ atracao.fila }} min</strong></span>
+        
+            <button @click="entrarNaFila(atracao.nome)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg transition">
+              Agendar Fila
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="navbar_searchinput"><!--"pé" do cabeçalho-->
-        <label for="searchinput"></label>
-        <input type="text" id="search_bar" name="searchinput" placeholder="&#128269;Digite a sua busca:"
-          aria-label="Barra de Pesquisa">
+      <div v-if="modal.visivel" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+          <h3 class="text-xl font-bold text-gray-900">{{ modal.titulo }}</h3>
+    
+          <p class="text-gray-600 text-sm leading-relaxed" v-html="modal.mensagem"></p>
+    
+          <button @click="modal.visivel = false" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">
+            Fechar
+          </button>
+        </div>
       </div>
 
-    </nav>
-  </header>
-
-  <!--Corpo do Site-->
-
-  <div class="home_page">
-
-    <!--(Futuro) Carossel de Imagens-->
-    <div class="home_page_banner">
-      <div class="img_1"><!--coloquei essa div aqui pq sei que vou precisar dela para fazer o carrossel de imagens-->
-        <img src="carrossel_img_1.jpg" alt="Imagem de uma montanha russa" class="first-img">
-      </div>
-    </div>
-
-    <!--"Atalho para compras rápidas"-->
-    <div class="container">
-
-      <div class="mobile"> <!--versão mobile-->
-        <h2>Garanta já o seu ingresso!</h2>
-        <button id="bt_comprar" aria-label="Comprar ingressos">
-          Comprar Agora <!--inserir link para a pagina de compra aqui-->
-        </button>
-
-      </div>
-
-      <div class="descktop"> <!--versão descktop-->
-
-      </div>
-    </div>
-    <!--Descrição do Parque-->
-    <div class="content_container">
-      <img src="content_slide_img_1.jpg" alt="Outra image de montanha montanha-russa" class="content_slide_img_1">
-
-      <div class="written_content">
-        <h3>Atrações</h3>
-        <p>
-          A montanha-russa é uma atração popular em parques de diversões, que consiste em uma estrutura de aço que forma
-          uma pista composta por elevações seguidas de quedas.
-        </p>
-      </div>
-    </div>
-
+    </main>
   </div>
-
-
-  <script src="ferris_wheel.js"></script>
 </body>
 
 </html>
