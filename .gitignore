@@ -1,4 +1,4 @@
-# Ambiente Virtual
+# Ambiente Virtual Python
 venv/
 .venv/
 __pycache__/
@@ -7,3 +7,6 @@ __pycache__/
 # Banco de Dados Local
 instance/
 *.db
+
+# Dependências do Front-end (Node)
+node_modules/
