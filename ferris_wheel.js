@@ -3,7 +3,7 @@ const { createApp, ref, computed, onMounted, onBeforeUnmount } = Vue
 
 createApp({
   setup() {
-    // Estados reativos (Substituem o antigo objeto "data")
+    // Estados reativos
     const menuAberto = ref(false)
     const busca = ref('')
     const slideAtivo = ref(0)
@@ -20,16 +20,36 @@ createApp({
       { imagem: 'content_slide_img_1.jpg', alt: 'Roda Gigante', texto: 'Uma vista inesquecível de todo o parque.' }
     ]
 
-    // Lista estruturada de atrações para a Componentização
-    const atracoes = [
-      { id: 1, nome: 'Montanha-Russa Thunder', categoria: 'Radicais', imagem: 'carrossel_img_1.jpg', descricao: 'Uma estrutura de aço imponente com quedas verticais livres, loops perfeitos e velocidade máxima para os verdadeiros amantes de adrenalina.', fila: 45 },
-      { id: 2, nome: 'Roda Gigante Ferris Wheel', categoria: 'Família', imagem: 'content_slide_img_1.jpg', descricao: 'Nossa atração principal. Cabines fechadas, climatizadas e confortáveis para você curtir a paisagem panorâmica com toda a família.', fila: 15 },
-      { id: 3, nome: 'Carrossel Mágico', categoria: 'Infantil', imagem: 'carrossel_img_1.jpg', descricao: 'Luzes brilhantes, música clássica e figuras entalhadas à mão que trazem de volta a nostalgia dos parques tradicionais.', fila: 5 }
-    ]
+    // 🎡 MODIFICAÇÃO: 'atracoes' agora é uma ref reativa que começa vazia
+    const atracoes = ref([])
 
-    // Função reativa que filtra as atrações por categoria e busca ao mesmo tempo
+    // 🚀 NOVO: Função para buscar as atrações direto da sua API Flask
+    const buscarAtracoesDoBanco = async () => {
+      try {
+        const resposta = await fetch('http://127.0.0.1:5000/api/atracoes')
+        const dadosDoBanco = await resposta.json()
+        
+        // Mapeia os dados do banco populando os campos que o seu HTML usa
+        atracoes.value = dadosDoBanco.map(atracao => {
+          return {
+            id: atracao.id,
+            nome: atracao.nome,
+            status: atracao.status, // Você pode usar no HTML se quiser!
+            
+            // Campos temporários com base na capacidade/id até você criar colunas para eles no SQLite:
+            categoria: atracao.id % 2 === 0 ? 'Família' : 'Radicais', 
+            descricao: `Atração incrível com capacidade para ${atracao.capacidade} pessoas simultaneamente. Status atual: ${atracao.status}.`,
+            imagem: atracao.id % 2 === 0 ? 'content_slide_img_1.jpg' : 'carrossel_img_1.jpg'
+          }
+        })
+      } catch (erro) {
+        console.error("Erro ao conectar com a API Flask do Ferris Wheel:", erro)
+      }
+    }
+
+    // Função reativa que filtra (Modificada levemente para usar .value no atracoes)
     const atracoesFiltradas = computed(() => {
-      return atracoes.filter(atracao => {
+      return atracoes.value.filter(atracao => {
         const correspondeCategoria = categoriaSelecionada.value === 'Todos' || atracao.categoria === categoriaSelecionada.value
         const correspondeBusca = atracao.nome.toLowerCase().includes(busca.value.toLowerCase()) || 
                                  atracao.descricao.toLowerCase().includes(busca.value.toLowerCase())
@@ -76,16 +96,20 @@ createApp({
       modal.value.visivel = true
     }
 
-    // Inicialização automática do temporizador do carrossel
+    // Inicialização automática do temporizador do carrossel E chamada da API
     let timer
-    onMounted(() => { timer = setInterval(proximoSlide, 5000) })
+    onMounted(() => { 
+      timer = setInterval(proximoSlide, 5000)
+      buscarAtracoesDoBanco() // 🚀 Aciona a busca do banco assim que o site abre!
+    })
+    
     onBeforeUnmount(() => { clearInterval(timer) })
 
-    // No final do setup, precisamos retornar tudo que o HTML vai usar
+    // Retorno para o HTML
     return {
       menuAberto, busca, slideAtivo, qtdIngressos, categoriaSelecionada, categorias,
       carrinho, modal, carrossel, atracoesFiltradas,
       toggleMenu, proximoSlide, slideAnterior, alterarQuantidade, adicionarAoCarrinho, entrarNaFila, openModal
     }
   }
-}).mount('#app') // Conecta o Vue na nossa <div id="app"> do HTML
+}).mount('#app')
