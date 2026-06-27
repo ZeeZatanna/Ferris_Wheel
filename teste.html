@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Teste CRUD Ferris Wheel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f9;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn-post {
+      background: #5c6bc0;
+    }
+
+    .btn-get {
+      background: #26a69a;
+    }
+
+    .btn-put {
+      background: #ffa726;
+    }
+
+    .btn-delete {
+      background: #ef5350;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 50px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🎡 Painel de Testes CRUD - Ferris Wheel</h1>
+
+  <label for="idInput">Digite o ID da Atração:</label>
+  <input type="number" id="idInput" value="1" style="width: 50px; padding: 5px; font-size: 16px;">
+  <br><br>
+
+  <button class="btn-post" onclick="cadastrarBrinquedo()">1. Cadastrar (POST)</button>
+  <button class="btn-get" onclick="listarBrinquedos()">2. Listar Todos (GET)</button>
+
+  <button class="btn-put" onclick="executarEditar()">3. Editar ID Digitado (PUT)</button>
+  <button class="btn-delete" onclick="executarDeletar()">4. Deletar ID Digitado (DELETE)</button>
+
+  <h3>Resultado na Tela:</h3>
+  <div id="resultado">Clique em um dos botões acima...</div>
+
+  <script>
+    const URL_API = 'http://127.0.0.1:5000/api/atracoes';
+
+    async function cadastrarBrinquedo() {
+      try {
+        const resposta = await fetch(URL_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome: "Roda Gigante Star", capacidade: 32 })
+        });
+        const dados = await resposta.json();
+        document.getElementById('resultado').innerText = JSON.stringify(dados, null, 2);
+      } catch (erro) { console.error(erro); }
+    }
+
+    async function listarBrinquedos() {
+      try {
+        const resposta = await fetch(URL_API);
+        const dados = await resposta.json();
+        document.getElementById('resultado').innerText = JSON.stringify(dados, null, 2);
+      } catch (erro) { console.error(erro); }
+    }
+
+    // 🔄 TESTANDO O PUT
+    async function editarBrinquedo(id) {
+      try {
+        const resposta = await fetch(`${URL_API}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome: "Roda Gigante Turbinada", capacidade: 40, status: "Manutenção" })
+        });
+        const dados = await resposta.json();
+        document.getElementById('resultado').innerText = JSON.stringify(dados, null, 2);
+      } catch (erro) { console.error(erro); }
+    }
+
+    // ❌ TESTANDO O DELETE
+    async function deletarBrinquedo(id) {
+      try {
+        const resposta = await fetch(`${URL_API}/${id}`, {
+          method: 'DELETE'
+        });
+        const dados = await resposta.json();
+        document.getElementById('resultado').innerText = JSON.stringify(dados, null, 2);
+      } catch (erro) { console.error(erro); }
+    }
+
+    // Função auxiliar para pegar o ID da caixinha e mandar editar
+    function executarEditar() {
+      const id = document.getElementById('idInput').value;
+        editarBrinquedo(id);
+    }
+
+    // Função auxiliar para pegar o ID da caixinha e mandar deletar
+    function executarDeletar() {
+      const id = document.getElementById('idInput').value;
+        deletarBrinquedo(id);
+    }
+  </script>
+</body>
+
+</html>

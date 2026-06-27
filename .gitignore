@@ -1,0 +1,9 @@
+# Ambiente Virtual
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Banco de Dados Local
+instance/
+*.db
